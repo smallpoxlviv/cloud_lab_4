@@ -1,5 +1,4 @@
 aws_wsgi==0.2.7
-awsgi==0.0.5
 Flask==2.0.2
 flask_cors==3.0.10
 PyMySQL==1.0.2
