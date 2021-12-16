@@ -13,4 +13,4 @@ RUN npm run build
 FROM nginx:stable-alpine
 
 COPY --from=build-step /app/cloud_lab_4/build /usr/share/nginx/html
-COPY ../default.conf /etc/nginx/conf.d/default.conf
+COPY ./default.conf /etc/nginx/conf.d/default.conf
