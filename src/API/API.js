@@ -1,7 +1,7 @@
 export const getParcels = async () => {
   try {
     const result = await fetch(
-      "https://hzrq7ak6j3.execute-api.eu-central-1.amazonaws.com/lab_2"
+      "app-lb-973713544.eu-central-1.elb.amazonaws.com/api"
     );
     let data = await result.json();
     data = JSON.parse(data.body)
