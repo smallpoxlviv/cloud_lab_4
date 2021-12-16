@@ -4,11 +4,15 @@ services:
     hostname: backend
     image: smallpoxlviv/cloud_lab_4_backend
     environment:
-      - db_name=$db_name
-      - db_username=$db_username
-      - db_password=$db_password
+      - db_username=root
+      - db_password=rootroot
+      - db_name=cloud_lab_2
     build:
       dockerfile: ./backend/Dockerfile
+    #deploy:
+      #x-aws-autoscaling: 
+        #cpu: 10
+        #max: 2
     ports:
       - 5000:5000
   frontend:
@@ -20,4 +24,3 @@ services:
       dockerfile: ./frontend/Dockerfile
     ports:
       - 80:80
-
