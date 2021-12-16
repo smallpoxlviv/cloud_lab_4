@@ -18,3 +18,4 @@ services:
     image: smallpoxlviv/cloud_lab_4_frontend
     ports:
       - 80:80
+      
