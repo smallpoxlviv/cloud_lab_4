@@ -96,6 +96,11 @@ def add_river():
     return jsonify({"body" : json.dumps(data)})
     
 
+@app.route(BASE_ROUTE + "/healthcheck", methods=["GET"])
+def healthcheck():
+    return jsonify({"body" : json.dumps(data)})
+
+
 def handler(event, context):
     return awsgi.response(app, event, context)
 
