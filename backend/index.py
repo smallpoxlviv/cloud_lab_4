@@ -12,10 +12,10 @@ from flask import Flask, jsonify, request
 
 
 #rds settings
-rds_host  = os.environ.get("db_host")
-name = os.environ.get("db_username")
-password = os.environ.get("db_password")
-db_name = os.environ.get("db_name")
+rds_host  = "db-lab-4.ctvifzp8cnoq.us-east-2.rds.amazonaws.com"
+name = "root"
+password = "rootroot"
+db_name = "cloud_lab_2"
     
 sensor_id_key = "sensor_id"
 name_key = 'name'
