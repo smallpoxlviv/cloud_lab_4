@@ -8,6 +8,7 @@ services:
       - db_username=root
       - db_password=rootroot
       - db_name=cloud_lab_2
+      - db_host=db_host
       - AWS_REGION=eu-west-3
     deploy:
       x-aws-autoscaling: 

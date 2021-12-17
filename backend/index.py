@@ -12,7 +12,7 @@ from flask import Flask, jsonify, request
 
 
 #rds settings
-rds_host  = "lab2database.chov87qbwh0h.eu-central-1.rds.amazonaws.com"
+rds_host  = os.environ.get("db_host")
 name = os.environ.get("db_username")
 password = os.environ.get("db_password")
 db_name = os.environ.get("db_name")
@@ -98,7 +98,7 @@ def add_river():
 
 @app.route(BASE_ROUTE + "/healthcheck", methods=["GET"])
 def healthcheck():
-    return jsonify({"body" : json.dumps(data)})
+    return jsonify({"body" : "ok"})
 
 
 def handler(event, context):
