@@ -8,6 +8,11 @@ services:
       - db_username=root
       - db_password=rootroot
       - db_name=cloud_lab_2
+      - AWS_REGION=eu-west-3
+    deploy:
+      x-aws-autoscaling: 
+        cpu: 10
+        max: 2
     ports:
       - 5000:5000
   frontend:
