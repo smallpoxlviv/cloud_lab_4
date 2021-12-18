@@ -1,20 +1,16 @@
 import requests
-# import argparse
 import time
-
-
-# cert_path = "./aws_keys/0ff331861ec522becc8547c88dcbc6f47f0747a12f51fd0b00319ac9d4322c58-certificate.pem.crt"
-# key_path = "./aws_keys/0ff331861ec522becc8547c88dcbc6f47f0747a12f51fd0b00319ac9d4322c58-private.pem.key"
-# endpoint = "ahdkfnapoyirm-ats.iot.eu-central-1.amazonaws.com"
-# topic = "$aws/things/cloud_lab_3_thing_3/shadow/update"
-# publish_url = 'https://' + endpoint + ':8443/topics/' + topic + '?qos=1'
+import os
 
 sensor_id = 1
-name = "dnipro"
+name = "river_1"
 settlement = "settlement_1"
 latitude = "11.1234567"
 longtitude = "11.1234567"
 water_level = 11
+
+publish_url = os.environ.get("PUBLISH_URL")
+timeout = os.environ.get("TIMEOUT")
 
 counter = 0
 while True:
@@ -27,9 +23,8 @@ while True:
                 else:
                         water_level-=1
                 if water_level <= 0 or water_level >= 20:
-                        water_level = 13
+                        water_level = 11
                 
-        # Shadow JSON Message formware
         messageJson = '{"sensor_id": ' + str(sensor_id) + ',"name":"' + name + '","settlement": "' + settlement + '" ,"latitude": "' + latitude + '","longtitude": "' + longtitude + '" ,"water_level": ' + str(water_level) + '}'
         publish = requests.request('POST',publish_url ,data=messageJson,)
 
@@ -37,4 +32,4 @@ while True:
         print("Response status: ", str(publish.status_code))
         if publish.status_code == 200:
                 print("Response body:", publish.text)
-        time.sleep(1)
+        time.sleep(timeout)

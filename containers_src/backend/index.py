@@ -12,10 +12,10 @@ from flask import Flask, jsonify, request
 
 
 #rds settings
-rds_host  = "db-lab-4.ctvifzp8cnoq.us-east-2.rds.amazonaws.com"
-name = "root"
-password = "rootroot"
-db_name = "cloud_lab_2"
+rds_host  = os.environ.get("DB_HOST")
+username = os.environ.get("DB_USERNAME")
+password = os.environ.get("DB_PASSWORD")
+db_name = os.environ.get("DB_NAME")
     
 sensor_id_key = "sensor_id"
 name_key = 'name'
@@ -31,7 +31,7 @@ BASE_ROUTE = "/iot"
 @app.route(BASE_ROUTE, methods=["GET"])
 def get_river():
     try:
-        conn = pymysql.connect(host=rds_host, user=name, passwd=password, db=db_name, connect_timeout=5)
+        conn = pymysql.connect(host=rds_host, user=username, passwd=password, db=db_name, connect_timeout=5)
     except pymysql.MySQLError as e:
         return jsonify({"body" : "MySQLError"})
 
@@ -60,7 +60,7 @@ def get_river():
 def add_river():
 
     try:
-        conn = pymysql.connect(host=rds_host, user=name, passwd=password, db=db_name, connect_timeout=5)
+        conn = pymysql.connect(host=rds_host, user=username, passwd=password, db=db_name, connect_timeout=5)
     except pymysql.MySQLError as e:
         return jsonify({"body" : "MySQLError"})
 
