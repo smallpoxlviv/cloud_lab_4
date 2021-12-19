@@ -65,11 +65,11 @@ def add_river():
         return jsonify({"body" : "MySQLError"})
 
     sensor_id = request.json[sensor_id_key]
-    name = event[name_key]
-    settlement = event[settlement_key]
-    latitude = event[latitude_key]
-    longtitude = event[longtitude_key]
-    water_level = event[water_level_key]
+    name = request.json[name_key]
+    settlement = request.json[settlement_key]
+    latitude = request.json[latitude_key]
+    longtitude = request.json[longtitude_key]
+    water_level = request.json[water_level_key]
 
     ts = time.time()
     my_time = datetime.fromtimestamp(ts,tz=pytz.utc)
@@ -87,11 +87,12 @@ def add_river():
         "measurement_date": measurement_date
     }]
 
+
     with conn.cursor() as cur:
         sql = "UPDATE `river` SET name=%s, settlement=%s, latitude=%s, longtitude=%s,\
          water_level=%s, measurement_date=%s WHERE sensor_id=%s LIMIT 1;"
         cur.execute(sql, (name, settlement, latitude, longtitude, water_level, measurement_date, sensor_id))
-    conn.commit()
+    conn.commit()    
 
     return jsonify({"body" : json.dumps(data)})
     
