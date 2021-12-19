@@ -10,7 +10,7 @@ longtitude = "12.1234567"
 water_level = 12
 
 publish_url = os.environ.get("PUBLISH_URL")
-timeout = os.environ.get("TIMEOUT")
+timeout = int(os.environ.get("TIMEOUT"))
 
 counter = 0
 while True:
