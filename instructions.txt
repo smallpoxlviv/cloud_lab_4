@@ -116,7 +116,7 @@ load balancer type: application
 set autoscaling:
   minimum number: 1
   maximum: 2
-  target value cpu utilization: 10
+  target value cpu utilization: 2
   scale-out: 60
   scale-in: 120
 
@@ -124,5 +124,15 @@ set autoscaling:
 in cluster "sensors" run task "sensors"
 instance type: ec2
 number of tasks: 1
+
+	alarm
+create sns topic in SNS
+create subscription for sns topic
+  protocol: email
+confirm subscription in your email account
+create new service role 
+in cloudwatch find new alarm created by autoscalling
+edit it
+  add notification
 
 
