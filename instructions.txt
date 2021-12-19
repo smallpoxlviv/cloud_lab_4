@@ -1,0 +1,126 @@
+! You need to create your own frontend build with the modified API.js file, because the link in it leads to the api gateway url I created earlier (npm run build). Then create your own frontend image and use it further instead "smallpoxlviv/frontend". Sorry о◡о !
+
+	creating vpc
+create vpc "lab_4" (10.0.0.0/16)
+create internet gateway
+attach internet gateway to new vpc
+create subnet in vpc (public) (10.0.1.0/24)
+allow auto-assign public IPv4 to subnet (make it public)
+edit subnet route table -> add rule: 0.0.0.0/0 - [internet gateway name] and name "public_subnet_route_table"
+create subnet in vpc in diferent avability zone (public) (10.0.2.0/24)
+allow auto-assign public IPv4 to subnet (make it public)
+choose route table "public_subnet_route_table"
+create subnet in vpc (database) (10.0.3.0/24)
+create subnet in vpc in diferent avability zone (database) (10.0.4.0/24)
+
+	creating bastion host - https://www.youtube.com/watch?v=vTER05sRObI
+create security group "lab_4_bastion host"
+add inbound rule: 22 port for everyone
+create autoscaling group (launch template first)
+download key.pem
+
+	creating database
+create security group in EC2 inbound: 3306 port - 10.0.0.0/16
+create subnet group with two private subnets in diferent avability zone
+create subnet group with two public subnets in diferent avability zone
+create database instance in RDS
+start new connection over ssh in mysql workbench through bastion host
+  ssh hostname: bastian host endpoint
+  user: ec2-user
+  ssh key file: [choose ssh key file]
+  sql hostname: rds instance endpoint
+start cloud_lab_4_river.sql 
+
+	load balancers 
+create target group with port 80
+create application load balancers "frontend"
+create target group with port 5000
+create application load balancers "backend"
+
+	api gateway
+create api gateway
+create get and post methods with redirection to "backend" load balancer
+example path: "http://backend-609220192.us-east-2.elb.amazonaws.com:5000/iot"
+
+	enabling CORS support on a REST API resource
+choose the api gateway
+choose a resource under Resources.
+choose Enable CORS from the Actions drop-down menu.
+deploy api gateway
+
+	ecs task definitions
+create first tast definition for EC2 
+  name: "backend"
+  task memory: 128
+  task CPU: 128
+add container
+  name: "backend"
+  image: "smallpoxlviv/backend"
+  memory limit: hard, 128
+  port mapping: 5000, 5000
+  designate keys (local vars):
+  	DB_HOST: [api gateway url]
+  	DB_NAME: [your database name] (cloud_lab_4)
+  	DB_USERNAME: [your username]
+  	DB_PASSWORD: [your password]
+create second tast definition for EC2 
+  name: "frontend"
+  task memory: 128
+  task CPU: 128
+add container
+  name: "frontend"
+  image: "smallpoxlviv/frontend"
+  memory limit: hard, 128
+  port mapping: 80, 80
+create third tast definition for EC2 
+  name: "sensors"
+  task memory: 128
+  task CPU: 128
+add container
+  name: "sensors"
+  image: "smallpoxlviv/sensors"
+  memory limit: hard, 128
+  designate keys (local vars):
+    PUBLISH_URL: [api gateway url]
+    TIMEOUT: [timeout between sensor signals]
+
+    ecs clusters
+create first cluster EC2 linux + networking
+  name: backend
+  ec2 instance type: t2.micro/t3.micro
+  number of instances: 2
+  vpc: lab_4
+  subnets: public
+  port range: 5000
+
+create second cluster EC2 linux + networking
+  name: backend
+  ec2 instance type: t2.micro/t3.micro
+  number of instances: 2
+  vpc: lab_4
+  subnets: public
+  port range: 80
+
+create third EC2 linux + networking
+  name: sensors
+  ec2 instance type: t2.micro/t3.micro
+  number of instances: 2
+  vpc: lab_4
+  subnets: public
+
+	ecs services
+create service in cluster backend, frontend
+launch type: ec2 
+number of tasks: 2
+load balancer type: application
+set autoscaling:
+  minimum number: 2
+  maximum: 3
+  target value cpu utilization: 25
+  scale-out: 60
+  scale-in: 120
+
+  	sensors task
+in cluster "sensors" run task "sensors"
+instance type: ec2
+number of tasks: 1
