@@ -65,11 +65,11 @@ def add_river():
         return jsonify({"body" : "MySQLError"})
 
     sensor_id = request.json[sensor_id_key]
-    name = event[state_key][reported_key][name_key]
-    settlement = event[state_key][reported_key][settlement_key]
-    latitude = event[state_key][reported_key][latitude_key]
-    longtitude = event[state_key][reported_key][longtitude_key]
-    water_level = event[state_key][reported_key][water_level_key]
+    name = event[name_key]
+    settlement = event[settlement_key]
+    latitude = event[latitude_key]
+    longtitude = event[longtitude_key]
+    water_level = event[water_level_key]
 
     ts = time.time()
     my_time = datetime.fromtimestamp(ts,tz=pytz.utc)

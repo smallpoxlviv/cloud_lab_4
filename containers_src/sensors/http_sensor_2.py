@@ -26,7 +26,7 @@ while True:
                         water_level = 12
                 
         messageJson = '{"sensor_id": ' + str(sensor_id) + ',"name":"' + name + '","settlement": "' + settlement + '" ,"latitude": "' + latitude + '","longtitude": "' + longtitude + '" ,"water_level": ' + str(water_level) + '}'
-        publish = requests.request('POST',publish_url ,data=messageJson,)
+        publish = requests.request('POST',publish_url ,data=messageJson)
 
         # print results
         print("Response status: ", str(publish.status_code))

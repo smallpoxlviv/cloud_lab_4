@@ -88,7 +88,7 @@ add container
 create first cluster EC2 linux + networking
   name: backend
   ec2 instance type: t2.micro/t3.micro
-  number of instances: 2
+  number of instances: 1
   vpc: lab_4
   subnets: public
   port range: 5000
@@ -96,7 +96,7 @@ create first cluster EC2 linux + networking
 create second cluster EC2 linux + networking
   name: backend
   ec2 instance type: t2.micro/t3.micro
-  number of instances: 2
+  number of instances: 1
   vpc: lab_4
   subnets: public
   port range: 80
@@ -104,19 +104,19 @@ create second cluster EC2 linux + networking
 create third EC2 linux + networking
   name: sensors
   ec2 instance type: t2.micro/t3.micro
-  number of instances: 2
+  number of instances: 1
   vpc: lab_4
   subnets: public
 
 	ecs services
 create service in cluster backend, frontend
 launch type: ec2 
-number of tasks: 2
+number of tasks: 1
 load balancer type: application
 set autoscaling:
-  minimum number: 2
-  maximum: 3
-  target value cpu utilization: 25
+  minimum number: 1
+  maximum: 2
+  target value cpu utilization: 10
   scale-out: 60
   scale-in: 120
 
@@ -124,3 +124,5 @@ set autoscaling:
 in cluster "sensors" run task "sensors"
 instance type: ec2
 number of tasks: 1
+
+
