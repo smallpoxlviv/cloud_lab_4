@@ -32,9 +32,17 @@ start new connection over ssh in mysql workbench through bastion host
 start cloud_lab_4_river.sql 
 
 	load balancers 
-create target group with port 80
+create instances target group with
+  port: 80
+  healthcheck: /index.html
+  advanced health check settings:
+    port: traffic port
 create application load balancers "frontend"
-create target group with port 5000
+create instances target group with 
+  port: 5000
+  healthcheck: /healthcheck
+  advanced health check settings:
+    port: traffic port
 create application load balancers "backend"
 
 	api gateway
@@ -57,7 +65,7 @@ add container
   name: "backend"
   image: "smallpoxlviv/backend"
   memory limit: hard, 128
-  port mapping: 5000, 5000
+  port mapping: 0, 5000
   designate keys (local vars):
   	DB_HOST: [api gateway url]
   	DB_NAME: [your database name] (cloud_lab_4)
@@ -71,7 +79,7 @@ add container
   name: "frontend"
   image: "smallpoxlviv/frontend"
   memory limit: hard, 128
-  port mapping: 80, 80
+  port mapping: 0, 80
 create third tast definition for EC2 
   name: "sensors"
   task memory: 128
@@ -91,7 +99,7 @@ create first cluster EC2 linux + networking
   number of instances: 1
   vpc: lab_4
   subnets: public
-  port range: 5000
+  port range: 1-65535
 
 create second cluster EC2 linux + networking
   name: frontend
@@ -99,7 +107,7 @@ create second cluster EC2 linux + networking
   number of instances: 1
   vpc: lab_4
   subnets: public
-  port range: 80
+  port range: 1-65535
 
 create third EC2 linux + networking
   name: sensors
